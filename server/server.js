@@ -4,6 +4,7 @@ import cors from 'cors';
 import urouter from "./routes/users.js";
 import crouter from "./routes/clients.js";
 import arouter from "./routes/appts.js";
+import rrouter from "./routes/rentals.js";
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(express.urlencoded({extended : true}));
 app.use('/users', urouter);
 app.use('/clients', crouter);
 app.use('/appts', arouter);
+app.use('/rentals', rrouter);
 
 
 app.listen(process.env.PORT, ()=>{

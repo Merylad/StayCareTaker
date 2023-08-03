@@ -1,4 +1,4 @@
-import { getAllClients,getClientById, addClient, deleteClient, updateClient  } from "../models/clients.js";
+import { getAllClients,getClientById, getClientsByUser_id, addClient, deleteClient, updateClient  } from "../models/clients.js";
 
 export const _getAllClients = async (req, res) =>{
     try{
@@ -21,11 +21,22 @@ export const _getClientById = async (req,res)=>{
     }
 }
 
+export const _getClientsByUser_id = async(req,res)=>{
+    const id = req.params.id;
+    try{
+        const row = await getClientsByUser_id(id);
+        res.json(row);
+    }catch(error){
+        console.log(error);
+        res.status(404).json({msg: 'Something went wrong :('})
+    }
+}
+
 export const _addClient = async (req, res) =>{
-    const {firstname, lastname, email, phone} = req.body
+    const {firstname, lastname, email, phone, user_id} = req.body
     const lower_email = email.toLowerCase()
     try{
-        const row = await addClient(firstname, lastname, lower_email, phone);
+        const row = await addClient(firstname, lastname, lower_email, phone, user_id);
         res.json({msg: 'successfully added', user: row});
     } catch(error){
         console.log(error);
