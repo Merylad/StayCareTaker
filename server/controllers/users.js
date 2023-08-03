@@ -1,4 +1,4 @@
-import { getAllUsers, register, login } from "../models/users.js";
+import { getAllUsers, register, login, deleteUser, updatePassword } from "../models/users.js";
 import bcrypt from 'bcrypt';
 
 export const _getAllUsers = async (req, res)=>{
@@ -38,6 +38,7 @@ export const _register = async (req, res)=>{
 
 export const _login = async (req, res)=>{
     const {username, password} = req.body
+    console.log(password)
     const lower_username = username.toLowerCase();
 
     try{
@@ -46,10 +47,49 @@ export const _login = async (req, res)=>{
             return res.status(404).json({msg: 'Username not found :('})
            }
 
-        const match = await bcrypt.compare(req.body.password+"", row[0].password)
+        const match = await bcrypt.compare(password+"", row[0].password)
         if(!match) return res.status(400).json({msg: 'Oh! The password is incorrect, try again!'})
 
-        res.json({msg: 'Login successfull'})
+        res.json({msg: 'Login successfull', user: row})
+
+
+    }catch(error){
+        console.log(error);
+        res.status(404).json({msg: 'something went wrong :('})
+    }
+}
+
+export const _deleteUser = async (req,res)=>{
+    const id = req.params.id;
+    try{
+        const row = await deleteUser(id);
+        res.json({msg: 'successfully deleted', user: row})
+    }catch(error){
+        console.log(error);
+        res.status(404).json({msg: 'something went wrong :('})
+    }
+}
+
+export const _updatePassword = async (req, res) =>{
+    const {username, last_password, new_password} = req.body;
+    const id = req.params.id;
+    const lower_username = username.toLowerCase();
+    
+
+
+    try{
+        const row = await login(lower_username)
+        if (row.length === 0){
+            return res.status(404).json({msg: 'Username not found :('})
+           }
+        const match = await bcrypt.compare(last_password, row[0].password);
+        if(!match) return res.status(400).json({msg: 'The old password is incorrect, password update failed!'})
+
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(new_password+"", salt)
+
+        const data = await updatePassword(hash, id)
+        res.json({msg: 'Password updated successfully'})
 
 
     }catch(error){
