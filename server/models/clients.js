@@ -17,6 +17,7 @@ export const getClientsByUser_id = (id) =>{
     .where({user_id:id})
 }
 
+
 export const addClient = (firstname, lastname, email, phone, user_id)=>{
     return db('clients')
     .insert ({firstname, lastname, email, phone, user_id})

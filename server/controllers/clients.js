@@ -36,6 +36,23 @@ export const _addClient = async (req, res) =>{
     const {firstname, lastname, email, phone, user_id} = req.body
     const lower_email = email.toLowerCase()
     try{
+        const client_list = await getClientsByUser_id(user_id)
+        for (const client of client_list){
+        if (client.email === email){
+            return res.status(404).json({msg: 'This email already exists'})
+        }
+        if (client.phone === phone){
+            return res.status(404).json({msg: 'This phone number already exists'})
+        }
+    }
+    } catch(error){
+        console.log(error);
+        res.status(404).json({msg: 'Something went wrong :('})
+    }
+    
+
+    
+    try{
         const row = await addClient(firstname, lastname, lower_email, phone, user_id);
         res.json({msg: 'successfully added', user: row});
     } catch(error){
