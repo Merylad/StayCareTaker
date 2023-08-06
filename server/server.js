@@ -5,6 +5,7 @@ import urouter from "./routes/users.js";
 import crouter from "./routes/clients.js";
 import arouter from "./routes/appts.js";
 import rrouter from "./routes/rentals.js";
+import chrouter from "./routes/charges.js";
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use('/users', urouter);
 app.use('/clients', crouter);
 app.use('/appts', arouter);
 app.use('/rentals', rrouter);
+app.use('/charges', chrouter);
 
 
 app.listen(process.env.PORT, ()=>{
