@@ -18,7 +18,7 @@ export const login = (username) =>{
     .update ({last_login :new Date})
     .then(()=>{
         return db('users')
-        .select('user_id', 'username', 'password', 'last_login')
+        .select('user_id', 'username', 'password', 'last_login', 'firstname' )
         .where({ username });
     })
     

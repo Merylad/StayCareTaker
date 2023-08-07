@@ -1,5 +1,9 @@
 import { getAllUsers, register, login, deleteUser, updatePassword } from "../models/users.js";
 import bcrypt from 'bcrypt';
+import jwt from "jsonwebtoken";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export const _getAllUsers = async (req, res)=>{
     
@@ -37,25 +41,41 @@ export const _register = async (req, res)=>{
 }
 
 export const _login = async (req, res)=>{
-    const {username, password} = req.body
-    console.log(password)
+    const {username, password} = req.body;
+    console.log(password);
     const lower_username = username.toLowerCase();
 
     try{
-        const row = await login(lower_username)
+        const row = await login(lower_username);
         if (row.length === 0){
-            return res.status(404).json({msg: 'Username not found :('})
+            return res.status(404).json({msg: 'Username not found :('});
            }
 
-        const match = await bcrypt.compare(password+"", row[0].password)
-        if(!match) return res.status(400).json({msg: 'Oh! The password is incorrect, try again!'})
+        const match = await bcrypt.compare(password+"", row[0].password);
+        if(!match) return res.status(400).json({msg: 'Oh! The password is incorrect, try again!'});
 
-        res.json({msg: 'Login successfull', user: row})
+        const user_id = row[0].user_id;
+        const username = row[0].username;
+        const firstname = row[0].firstname;
+        const secret = process.env.ACCES_TOKEN_SECRET;
+
+        const accessToken = jwt.sign({user_id, username,firstname }, secret, {
+            expiresIn: "1d"
+        } );
+
+        res.cookie("token", accessToken, {
+            httpOnly: true,
+            maxAge: 60 * 1000
+        })
+
+
+
+        res.json({msg: 'Login successfull', user: row, token: accessToken});
 
 
     }catch(error){
         console.log(error);
-        res.status(404).json({msg: 'something went wrong :('})
+        res.status(404).json({msg: 'something went wrong :('});
     }
 }
 
@@ -96,4 +116,9 @@ export const _updatePassword = async (req, res) =>{
         console.log(error);
         res.status(404).json({msg: 'something went wrong :('})
     }
+}
+
+export const _logout = (req, res) =>{
+    res.clearCookie('token');
+    return res.sendStatus(200)
 }
