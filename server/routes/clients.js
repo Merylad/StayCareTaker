@@ -4,7 +4,7 @@ import { _getAllClients,_getClientById, _getClientsByUser_id, _addClient, _delet
 const crouter = express.Router()
 
 crouter.get('/', _getAllClients);
-crouter.get('/:id', _getClientById);
+crouter.get('/byclient/:id', _getClientById);
 crouter.get('/byuser/:id', _getClientsByUser_id)
 crouter.post('/', _addClient);
 crouter.delete('/:id', _deleteClient);

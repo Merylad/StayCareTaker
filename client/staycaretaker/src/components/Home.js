@@ -1,18 +1,20 @@
 import {useContext, useEffect, useState} from 'react';
 import { AppContext} from '../App';
 import jwt_token from 'jwt-decode';
-import { Typography, Button, Container, Grid, Paper } from '@mui/material';
+import { Typography, Button, Container, Grid } from '@mui/material';
 import { useNavigate} from 'react-router-dom';
 
 
 
+
 const Home = ()=>{
-    const {token} = useContext (AppContext)
-    const [user_id, setUser_id] = useState('')
+    const {token, setUser_id} = useContext (AppContext)
     const [firstname, setFirstname] = useState('')
     const [username, setUsername] = useState('')
 
     const navigate = useNavigate()
+
+    
 
     const userIsLogged = () =>{
         return(
@@ -59,7 +61,6 @@ const Home = ()=>{
     useEffect(()=>{
         if (token){
             const payload = jwt_token(token);
-            console.log('payload', payload);
             setUser_id(payload.user_id);
             setFirstname(payload.firstname);
             setUsername(payload.username);

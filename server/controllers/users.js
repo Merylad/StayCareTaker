@@ -42,7 +42,6 @@ export const _register = async (req, res)=>{
 
 export const _login = async (req, res)=>{
     const {username, password} = req.body;
-    console.log(password);
     const lower_username = username.toLowerCase();
 
     try{

@@ -1,7 +1,6 @@
 .navbar{
-    background-color: hsl(195, 53%, 79%);
+    background-color: rgb(173, 216, 230);
     display: flex;
     justify-content: space-evenly;
     gap: 20px;
 }
-
