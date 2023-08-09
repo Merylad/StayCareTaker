@@ -21,10 +21,6 @@ const UpdateClient = ({ client, open, onClose, onUpdate, msg }) => {
         setPhone(client.phone)
     }, [])
 
-    useEffect(() => {
-        console.log('msg has changed:', msg);
-    }, [msg]);
-
 
     
     

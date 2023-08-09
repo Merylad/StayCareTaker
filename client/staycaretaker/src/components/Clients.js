@@ -28,7 +28,7 @@ const Clients = () =>{
     const [clientToDeleteId, setClientToDeleteId] = useState(null);
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
     const [selectedClientToUpdate, setSelectedClientToUpdate] = useState(null);
-    const [deleteUpdate, setDeleteUpdate] = useState(false);
+    const [updateSuccess, setUpdateSuccess] = useState(false);
     const [msg, setMsg] = useState('');
 
     useEffect(()=>{
@@ -111,15 +111,12 @@ const Clients = () =>{
     
     
     const handleDelete = async (client_id) => {
-        console.log('in the handledelete')
         try {
             const res = await axios.delete(`/clients/${client_id}`);
             getClients(); 
             setDeleteSuccess(true); 
-            console.log('deletesuccess')
             } catch (err) {
                 console.log(err);
-                console.log('deletefail')
             }
         };
 
@@ -138,7 +135,7 @@ const Clients = () =>{
         const form = {firstname, lastname, email, phone, user_id}
         try{
             const res = await axios.put(`/clients/${client_id}`, form)
-            setDeleteUpdate(true)
+            setUpdateSuccess(true)
             handleUpdateDialogClose();
             getClients();
         }catch(err){
@@ -184,9 +181,9 @@ const Clients = () =>{
             />
         </Snackbar>
         <Snackbar
-            open={deleteUpdate}
+            open={updateSuccess}
             autoHideDuration={3000} 
-            onClose={() => setDeleteUpdate(false)}
+            onClose={() => setUpdateSuccess(false)}
         >
             <SnackbarContent
                 sx={{ backgroundColor: 'green' }} 

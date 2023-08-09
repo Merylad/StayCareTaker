@@ -12,6 +12,7 @@ import Agenda from './components/Agenda';
 import Charges from './components/Charges';
 import Clients from './components/Clients';
 import AddClient from './components/AddClient';
+import AddAppt from './components/AddAppt';
 
 export const AppContext = createContext()
 
@@ -36,6 +37,7 @@ function App() {
           <Route path = '/charges' element = {<Charges/>} />
           <Route path = '/clients' element = {<Clients/>} />
           <Route path = '/addclient' element = {<AddClient/>} />
+          <Route path = '/addappt' element = {<AddAppt/>} />
         </Routes>
     </AppContext.Provider>
     </>

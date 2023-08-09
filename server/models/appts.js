@@ -11,6 +11,12 @@ export const getApptById = (id) =>{
     .where({appt_id : id})
 }
 
+export const getApptByUserId = (id) =>{
+    return db('appts')
+    .select('*')
+    .where({user_id : id})
+}
+
 export const addAppt = (user_id, name, city) =>{
     return db('appts')    
     .insert({user_id, name, city})

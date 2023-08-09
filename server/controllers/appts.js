@@ -1,4 +1,4 @@
-import { getAllAppts, getApptById, addAppt, updateAppt, deleteAppt } from "../models/appts.js";
+import { getAllAppts, getApptById,getApptByUserId, addAppt, updateAppt, deleteAppt } from "../models/appts.js";
 
 export const _getAllAppts = async (req, res) =>{
     try{
@@ -14,6 +14,17 @@ export const _getApptById = async (req, res)=>{
     const id = req.params.id;
     try{
         const row = await getApptById(id);
+        res.json(row);
+    }catch(e){
+        console.log(e);
+        res.status(404).json({msg: 'Something went wrong :('});
+    }
+}
+
+export const _getApptByUserId = async (req, res)=>{
+    const id = req.params.id;
+    try{
+        const row = await getApptByUserId(id);
         res.json(row);
     }catch(e){
         console.log(e);
