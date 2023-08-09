@@ -17,6 +17,13 @@ export const getClientsByUser_id = (id) =>{
     .where({user_id:id})
 }
 
+export const getClientByUserExcept = (userid, clientid)=>{
+    return db('clients')
+    .select('*')
+    .where({user_id: userid})
+    .whereNot({ client_id: clientid });
+}
+
 
 export const addClient = (firstname, lastname, email, phone, user_id)=>{
     return db('clients')
@@ -39,3 +46,4 @@ export const updateClient = (firstname, lastname, email, phone, id)=>{
     .update({firstname, lastname, email, phone})
     .returning(['firstname', 'lastname', 'email', 'phone'])
 }
+

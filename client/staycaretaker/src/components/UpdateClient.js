@@ -1,18 +1,18 @@
 import React from 'react';
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, TextField } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, Alert } from '@mui/material';
 import {useState, useContext, useEffect} from 'react';
 import { AppContext} from '../App';
-import axios from 'axios';
 
 
-const UpdateClient = ({ client, open, onClose, onUpdate }) => {
+
+const UpdateClient = ({ client, open, onClose, onUpdate, msg }) => {
     const {user_id} = useContext (AppContext);
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname]= useState('');
     const client_id = client.client_id
-    const data = {firstname, lastname, email, phone, client_id}
+    const data = {firstname, lastname, email, phone, client_id, user_id}
 
     useEffect(()=>{
         setFirstname(client.firstname)
@@ -21,7 +21,9 @@ const UpdateClient = ({ client, open, onClose, onUpdate }) => {
         setPhone(client.phone)
     }, [])
 
-    console.log('client', client)
+    useEffect(() => {
+        console.log('msg has changed:', msg);
+    }, [msg]);
 
 
     
@@ -76,6 +78,7 @@ const UpdateClient = ({ client, open, onClose, onUpdate }) => {
                 />
 
                 </form>
+                {msg==='' ? <></> : <Alert severity="error">{msg}</Alert>}
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose} color="primary">

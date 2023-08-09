@@ -8,6 +8,6 @@ crouter.get('/byclient/:id', _getClientById);
 crouter.get('/byuser/:id', _getClientsByUser_id)
 crouter.post('/', _addClient);
 crouter.delete('/:id', _deleteClient);
-crouter.put('/:id', _updateClient)
+crouter.put('/:clientid', _updateClient)
 
 export default crouter;

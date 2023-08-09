@@ -29,6 +29,7 @@ const Clients = () =>{
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
     const [selectedClientToUpdate, setSelectedClientToUpdate] = useState(null);
     const [deleteUpdate, setDeleteUpdate] = useState(false);
+    const [msg, setMsg] = useState('');
 
     useEffect(()=>{
         getClients();
@@ -110,12 +111,15 @@ const Clients = () =>{
     
     
     const handleDelete = async (client_id) => {
+        console.log('in the handledelete')
         try {
             const res = await axios.delete(`/clients/${client_id}`);
             getClients(); 
             setDeleteSuccess(true); 
+            console.log('deletesuccess')
             } catch (err) {
                 console.log(err);
+                console.log('deletefail')
             }
         };
 
@@ -130,16 +134,21 @@ const Clients = () =>{
         };
 
     const handleUpdate = async (data) => {
-        const {firstname, lastname, email, phone, client_id} = data
-        const form = {firstname, lastname, email, phone}
+        const {firstname, lastname, email, phone, client_id, user_id} = data
+        const form = {firstname, lastname, email, phone, user_id}
         try{
             const res = await axios.put(`/clients/${client_id}`, form)
             setDeleteUpdate(true)
-        }catch(e){
-            console.log(e)
+            handleUpdateDialogClose();
+            getClients();
+        }catch(err){
+            console.log(err)
+            setMsg(err.response.data.msg)
+            console.log('msg:', msg)
+            
         }
-        handleUpdateDialogClose();
-        getClients();
+        
+        
     };
 
 
@@ -234,6 +243,7 @@ const Clients = () =>{
                     open={updateDialogOpen}
                     onClose={handleUpdateDialogClose}
                     onUpdate={handleUpdate}
+                    msg={msg}
                 />
             )}
         

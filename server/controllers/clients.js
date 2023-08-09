@@ -1,4 +1,4 @@
-import { getAllClients,getClientById, getClientsByUser_id, addClient, deleteClient, updateClient  } from "../models/clients.js";
+import { getAllClients,getClientById, getClientsByUser_id,getClientByUserExcept, addClient, deleteClient, updateClient  } from "../models/clients.js";
 
 export const _getAllClients = async (req, res) =>{
     try{
@@ -73,11 +73,27 @@ export const _deleteClient = async (req, res) =>{
 }
 
 export const _updateClient = async (req, res) =>{
-    const {firstname, lastname, email, phone} = req.body
+    const {firstname, lastname, email, phone, user_id} = req.body
     const lower_email = email.toLowerCase();
-    const id = req.params.id
+    const client_id = req.params.clientid
+
     try{
-        const row = await updateClient(firstname, lastname, lower_email, phone, id)
+        const client_list = await getClientByUserExcept(user_id, client_id);
+        for (const client of client_list){
+            if (client.email === email){
+                return res.status(404).json({msg: 'This email already exists'})
+            }
+            if (client.phone === phone){
+                return res.status(404).json({msg: 'This phone number already exists'})
+            }}
+
+    }catch(error){
+        console.log(error);
+        res.status(404).json({msg: 'Something went wrong :('})
+    }
+
+    try{
+        const row = await updateClient(firstname, lastname, lower_email, phone, client_id)
         res.json({msg: 'The client has been successfullu updated', client: row})
 
     }catch(e){
