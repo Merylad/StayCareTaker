@@ -13,6 +13,7 @@ import Charges from './components/Charges';
 import Clients from './components/Clients';
 import AddClient from './components/AddClient';
 import AddAppt from './components/AddAppt';
+import AddCharges from './components/AddCharges';
 
 export const AppContext = createContext()
 
@@ -22,10 +23,14 @@ function App() {
   const [user_id, setUser_id] = useState('')
   const [firstname, setFirstname] = useState('')
   const [username, setUsername] = useState('')
+  const [apptCharges, setApptCharges] = useState({})
+
+ 
 
   return (
     <>
-    <AppContext.Provider value = {{token, setToken, setUser_id, user_id}}>
+     
+    <AppContext.Provider value = {{token, setToken, setUser_id, user_id, setApptCharges, apptCharges}}>
       <Nav />
       <img src = {logo} alt='logo' style={{width : '100%'}}/>
       <Routes>
@@ -34,10 +39,11 @@ function App() {
           <Route path = '/register' element = {<Register/>} />
           <Route path = '/accomodations' element = {<Accomodations/>} />
           <Route path = '/agenda' element = {<Agenda/>} />
-          <Route path = '/charges' element = {<Charges/>} />
+          <Route path = '/charges' element = {<Charges accomodation={apptCharges}/>} />
           <Route path = '/clients' element = {<Clients/>} />
           <Route path = '/addclient' element = {<AddClient/>} />
           <Route path = '/addappt' element = {<AddAppt/>} />
+          <Route path = '/addcharges' element = {<AddCharges/>} />
         </Routes>
     </AppContext.Provider>
     </>

@@ -7,9 +7,12 @@ import { Card, CardContent, CardActions, Button, Typography } from '@mui/materia
 import UpdateIcon from '@mui/icons-material/Update';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import AccountBalanceRoundedIcon from '@mui/icons-material/AccountBalanceRounded';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
 import { Snackbar, SnackbarContent } from '@mui/material';
 import UpdateAppt from './UpdateAppt';
+
+
 
 //Styling the cards
 const container = {
@@ -41,13 +44,14 @@ const contentStyle = {
 const Accomodations = () =>{
     
     const [appts, setAppts] = useState([]);
-    const {user_id} = useContext(AppContext);
+    const {user_id, setApptCharges} = useContext(AppContext);
     const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
     const [clientToDeleteId, setClientToDeleteId] = useState(null);
     const [deleteSuccess, setDeleteSuccess] = useState(false);
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
     const [selectedApptToUpdate, setSelectedApptToUpdate] = useState(null);
     const [updateSuccess, setUpdateSuccess] = useState(false);
+    
 
     useEffect(()=>{
         getAppts();
@@ -115,13 +119,13 @@ const Accomodations = () =>{
     return(
         <div style={container}>
             {appts.map((accommodation) => (
-                <Card key={accommodation.id} style={cardStyle}>
+                <Card key={accommodation.appt_id} style={cardStyle}>
                                      
                 <CardContent style={contentStyle}>
                     <Typography variant="h4">{accommodation.name}</Typography>
                     <Typography variant="h6">{accommodation.city}</Typography>
                 </CardContent>
-                <CardActions style={{display: 'flex', justifyContent: 'space-around', marginTop: '16px'  }}>
+                <CardActions style={{display: 'flex', justifyContent: 'space-around' }}>
                 <Button 
                     size="small"
                     color="primary"
@@ -129,6 +133,19 @@ const Accomodations = () =>{
                     onClick={() => handleUpdateClick(accommodation)}>
                         Update <UpdateIcon/>
                     </Button>
+                    
+                    <Link
+                       to='/charges'>
+                            <Button 
+                            variant = "contained" 
+                            color="success" 
+                            size="small"
+                            style={{marginLeft: '7px'}}
+                            onClick={()=>setApptCharges(accommodation)}>
+                                Charges <AccountBalanceRoundedIcon/>
+                            </Button>
+
+                     </Link>
                     <Button 
                     size="small"  
                     color="secondary" 
@@ -136,6 +153,8 @@ const Accomodations = () =>{
                     onClick={()=>openDeleteConfirmation(accommodation.appt_id)}>
                         Delete <DeleteIcon/>
                     </Button>
+                    
+                    
                 </CardActions>
             </Card>
             ))}

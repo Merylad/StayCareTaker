@@ -1,8 +1,19 @@
-import { getAllCharges, addCharges, updateCharges, deleteCharges } from "../models/charges.js";
+import { getAllCharges, getChargesByApptId, addCharges, updateCharges, deleteCharges } from "../models/charges.js";
 
 export const _getAllCharges = async (req,res)=>{
     try {
         const row = await getAllCharges();
+        res.json(row);
+    }catch(error){
+        console.log(error);
+        res.status(404).json({msg: 'Something went wrong :('});
+    }
+}
+
+export const _getChargesByApptId = async(req, res) =>{
+    const appt_id = req.params.id
+    try {
+        const row = await getChargesByApptId(appt_id);
         res.json(row);
     }catch(error){
         console.log(error);

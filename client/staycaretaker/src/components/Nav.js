@@ -84,9 +84,6 @@ const Nav = ()=>{
                 <Button component={Link} to="/agenda">
                 Agenda <CalendarMonthOutlinedIcon />
                 </Button>
-                <Button component={Link} to="/charges">
-                Charges <AccountBalanceRoundedIcon/>
-                </Button>
                 <Button component={Link} to="/clients">
                 Clients <Groups2OutlinedIcon/>
                 </Button>

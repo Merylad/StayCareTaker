@@ -192,6 +192,7 @@ const Clients = () =>{
         </Snackbar>
         <Grid container spacing={3} >
            {searchQuery!== '' ? renderClients(filteredClients) : renderClients(clients_list)}
+           </Grid>
            <Grid item xs={12} sm={6} md={4}>
         <Link to="/addclient" style={{ textDecoration: 'none' }}>
             <Card variant="outlined" style={styles.card}>
@@ -204,7 +205,7 @@ const Clients = () =>{
             </Card>
           </Link>
         </Grid>
-        </Grid>
+        
         
         <Dialog
             open={deleteConfirmationOpen}

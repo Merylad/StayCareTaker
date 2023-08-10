@@ -45,7 +45,6 @@ const Login = ()=>{
             const form = {username, password}
             try{
                 const res = await axios.post('/users/login', form) 
-                console.log(res.data);
                 setToken(res.data.token)
                 setMsg('');
                 navigate('/')

@@ -5,6 +5,13 @@ export const getAllCharges = ()=>{
     .select('*')
 }
 
+export const getChargesByApptId = (id) =>{
+    return db('charges')
+    .select('*')
+    .where({appt_id : id})
+    .orderBy('date', 'desc')
+}
+
 export const addCharges = (appt_id, name, amount, currency,date)=>{
     return db('charges')
     .insert({appt_id, name, amount, currency,date})
