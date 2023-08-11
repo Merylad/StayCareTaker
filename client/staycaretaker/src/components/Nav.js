@@ -81,8 +81,8 @@ const Nav = ()=>{
                 <Button component={Link} to="/accomodations">
                 Accomodations < LocationCityRoundedIcon/>
                 </Button>
-                <Button component={Link} to="/agenda">
-                Agenda <CalendarMonthOutlinedIcon />
+                <Button component={Link} to="/booking">
+                Booking <CalendarMonthOutlinedIcon />
                 </Button>
                 <Button component={Link} to="/clients">
                 Clients <Groups2OutlinedIcon/>

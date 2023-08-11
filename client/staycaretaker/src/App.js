@@ -8,7 +8,7 @@ import Home from './components/Home';
 import Login from './components/Login.js';
 import Register from './components/Register';
 import Accomodations from './components/Accomodations';
-import Agenda from './components/Agenda';
+import Booking from './components/Booking';
 import Charges from './components/Charges';
 import Clients from './components/Clients';
 import AddClient from './components/AddClient';
@@ -38,7 +38,7 @@ function App() {
           <Route path = '/login' element = {<Login/>} />
           <Route path = '/register' element = {<Register/>} />
           <Route path = '/accomodations' element = {<Accomodations/>} />
-          <Route path = '/agenda' element = {<Agenda/>} />
+          <Route path = '/booking' element = {<Booking/>} />
           <Route path = '/charges' element = {<Charges accomodation={apptCharges}/>} />
           <Route path = '/clients' element = {<Clients/>} />
           <Route path = '/addclient' element = {<AddClient/>} />

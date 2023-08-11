@@ -26,8 +26,6 @@ const UpdateCharges = ({ charge, open, onClose, onUpdate}) =>{
         setCurrency(charge.currency);
         
         setSelectedDate(dayjs(charge.date));
-        console.log('dayjs', dayjs('2022-04-17'))
-        console.log('value', dayjs(charge.date))
     }, [charge])
 
     

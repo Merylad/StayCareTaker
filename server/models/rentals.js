@@ -11,6 +11,13 @@ export const getRentalById = (id) =>{
     .select('*')
 }
 
+export const getRentalByUserId = (id)=>{
+    return db('rentals')
+    .where({user_id : id})
+    .select('*')
+    .orderBy('arrival')
+}
+
 export const addRental = (user_id, appt_id, client_id, arrival, departure, price_per_night, currency, origin , confirmed) =>{
     return db('rentals')
     .insert({user_id, appt_id, client_id, arrival, departure, price_per_night, currency, origin , confirmed})
