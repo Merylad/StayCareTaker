@@ -12,6 +12,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
+import {Link} from "react-router-dom";
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { Grid, Card, CardContent, Typography, CardActions, Button} from '@mui/material';
+
 import dayjs from 'dayjs';
 
 
@@ -35,19 +39,57 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const getApptName = async(id) =>{
-    try{
-        const res = await axios.get(`appts/byappt/${id}`)
-        return res.data
+const styles = {
+  card: {
+      borderRadius: 16,
+      boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+      margin: '10px',
+  },
+  content: {
+      paddingBottom: '16px !important',
+  },
+  button: {
+      fontWeight: 'bold',
+  },
+};
 
-    }catch(e){
-        console.log (e)
-    }
-}
+
 
 const Booking = () =>{
     const {user_id} = useContext(AppContext);
     const [allRentals, setAllRentals] = useState([])
+    const [rows, setRows] = useState([]);
+
+    const fetchApptName = async (id) => {
+      try {
+        const response = await fetch(`appts/byappt/${id}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data[0].name;
+      } catch (error) {
+        console.error('Fetch error:', error);
+        return ''; // Return a default value in case of error
+      }
+    };
+  
+    const fetchClientName = async (id) => {
+      try {
+        const response = await fetch(`clients/byclient/${id}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data[0].lastname +' '+ data[0].firstname;
+      } catch (error) {
+        console.error('Fetch error:', error);
+        return ''; // Return a default value in case of error
+      }
+    };
+
+
+
 
     function createData(rental_id, accomodation, client, arrival, departure, price_per_night, currency, origin, confirmed) {
         const formattedArrival = dayjs(arrival).locale('en').format('D MMMM YYYY');
@@ -63,13 +105,6 @@ const Booking = () =>{
                  origin, 
                  confirmed };
       }
-      
-      const rows = [];
-
-      allRentals.map(rental=>{
-        const data = createData(rental.rental_id,rental.appt_id, rental.client_id, rental.arrival, rental.departure, rental.price_per_night, rental.currency, rental.origin, rental.confirmed);
-        rows.push(data);
-      })
 
 
 
@@ -77,17 +112,38 @@ const Booking = () =>{
         getRentals()
     }, [])
 
-    const getRentals = async () =>{
-        try{
-            const res = await axios.get(`/rentals/byuser/${user_id}`);
-            setAllRentals(res.data)
-            console.log ('allRentals: ', res.data)
-
-        }catch(e){
-            console.log(e)
-        }
-    }
+    const getRentals = async () => {
+      try {
+        const res = await axios.get(`/rentals/byuser/${user_id}`);
+        const updatedRows = await Promise.all(
+          res.data.map(async (rental) => {
+            const apptName = await fetchApptName(rental.appt_id);
+            const clientName = await fetchClientName(rental.client_id);
+  
+            const data = createData(
+              rental.rental_id,
+              apptName,
+              clientName,
+              rental.arrival,
+              rental.departure,
+              rental.price_per_night,
+              rental.currency,
+              rental.origin,
+              rental.confirmed
+            );
+  
+            return data;
+          })
+        );
+  
+        setRows(updatedRows);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+  
     return(
+      <>
         <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
@@ -114,12 +170,29 @@ const Booking = () =>{
               <StyledTableCell align="right">{row.price_per_night}</StyledTableCell>
               <StyledTableCell align="right">{row.currency}</StyledTableCell>
               <StyledTableCell align="right">{row.origin}</StyledTableCell>
-              <StyledTableCell align="right">{row.confirmed}</StyledTableCell>
+              <StyledTableCell align="right">
+                {row.confirmed ? "✔️" : "❌"}
+            </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
       </Table>
     </TableContainer>
+
+    <Link to="/addrental" style={{ textDecoration: 'none' }}>
+            <Card variant="outlined" style={styles.card}>
+              <CardContent style={{ ...styles.content, textAlign: 'center' }}>
+                <Typography variant="h4" component="div">
+                  Add a new rental                 
+                </Typography>
+                <AddCircleOutlineIcon style={{ fontSize: 60 }} />
+              </CardContent>
+            </Card>
+          </Link> 
+    
+    </>
+
+    
     )
 }
 

@@ -14,6 +14,7 @@ import Clients from './components/Clients';
 import AddClient from './components/AddClient';
 import AddAppt from './components/AddAppt';
 import AddCharges from './components/AddCharges';
+import AddRental from './components/AddRental';
 
 export const AppContext = createContext()
 
@@ -44,6 +45,7 @@ function App() {
           <Route path = '/addclient' element = {<AddClient/>} />
           <Route path = '/addappt' element = {<AddAppt/>} />
           <Route path = '/addcharges' element = {<AddCharges/>} />
+          <Route path = '/addrental' element = {<AddRental/>} />
         </Routes>
     </AppContext.Provider>
     </>
