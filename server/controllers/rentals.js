@@ -1,4 +1,4 @@
-import { getAllRentals, getRentalById, getRentalByUserId, addRental, getRentalByAppt_id, deleteRental, updateRental} from "../models/rentals.js";
+import { getAllRentals, getRentalById,getRentalByApptExcept, getRentalByUserId, addRental, getRentalByAppt_id, deleteRental, updateRental} from "../models/rentals.js";
 
 export const _getAllRentals = async (req,res)=>{
     try{
@@ -36,9 +36,10 @@ export const _addRental = async (req,res) =>{
 
     const {user_id, appt_id, client_id, arrival, departure, price_per_night, currency, origin , confirmed} = req.body;
 
-    //checking if the arrival is before the departure
-
-    if (departure < arrival) return res.json({msg: "The departure date must be after the arrival date"})
+    // checking if the arrival is before the departure
+    const departureDate = new Date(departure);
+    const arrivalDate = new Date (arrival);
+    if (departureDate < arrivalDate) return res.json({msg: "The departure date must be after the arrival date"})
 
     // checking if the appt is not already rented
     try {
@@ -60,7 +61,7 @@ export const _addRental = async (req,res) =>{
 
          //if the appt already rented send an error
         if (overlapExists) {
-          return res.json({ msg: "The apartment is already rented during this period" });
+          return res.status(400).json({ msg: "The apartment is already rented during this period" });
         }
 
         //if there is no overlap : add the new rental to DB
@@ -100,17 +101,20 @@ export const _deleteRental = async (req, res)=>{
 }
 
 export const _updateRental = async (req, res) =>{
+    
     const {user_id, appt_id, client_id, arrival, departure, price_per_night, currency, origin , confirmed} = req.body;
 
     const id = req.params.id;
 
-    //checking if the arrival is before the departure
 
-    if (departure < arrival) return res.json({msg: "The departure date must be after the arrival date"})
+    //checking if the arrival is before the departure
+    const departureDate = new Date(departure);
+    const arrivalDate = new Date (arrival);
+    if (departureDate < arrivalDate) return res.json({msg: "The departure date must be after the arrival date"})
 
     // checking if the appt is not already rented
     try {
-        const existingRentals = await getRentalByAppt_id(appt_id);
+        const existingRentals = await getRentalByApptExcept(appt_id, id);
     
         
         const overlapExists = existingRentals.some((rental) => {
@@ -128,7 +132,7 @@ export const _updateRental = async (req, res) =>{
 
          //if the appt already rented send an error
         if (overlapExists) {
-          return res.json({ msg: "The apartment is already rented during this period" });
+          return res.status(404).json({ msg: "The apartment is already rented during this period" });
         }
 
         //if there is no overlap : update the new rental to DB

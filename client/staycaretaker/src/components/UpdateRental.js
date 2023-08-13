@@ -1,19 +1,20 @@
-import React, { useState, useContext, useEffect} from 'react';
-import { TextField, Button, Grid, Paper, Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import { FormControlLabel, Checkbox } from '@mui/material';
+import React, { useState, useContext, useEffect } from 'react';
+import { TextField, Button, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { AppContext} from '../App';
-import axios from 'axios';
-import { useNavigate} from 'react-router-dom';
-import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { FormControlLabel, Checkbox } from '@mui/material';
 import Alert from '@mui/material/Alert';
+import { AppContext} from '../App';
+import dayjs from 'dayjs';
 
-const AddRental = () =>{
+
+
+const UpdateRental = ({ rental, open, onClose, onUpdate, msg}) =>{
     const [selectedAppt, setSelectedAppt] = useState('');
     const [selectedClient, setSelectedClient] = useState('');
-    const [arrivalDate, setArrivalDate] = useState(null);
-    const [departureDate, setDepartureDate] = useState(null); 
+    const [arrivalDate, setArrivalDate] = useState('');
+    const [departureDate, setDepartureDate] = useState(''); 
     const [amount, setAmount] = useState('');
     const [currency, setCurrency] = useState('');
     const [origin, setOrigin] = useState('');
@@ -21,88 +22,37 @@ const AddRental = () =>{
 
     const {user_id, userAppts, setUserAppts, userClients, setUserClients} = useContext(AppContext);
 
-    const [msg, setMsg] = useState('');
-    const navigate = useNavigate();
-
-    
-
-  
-    const paperStyle = { padding: '30px 20px', width: 400, margin: '40px auto' };
-    const headerStyle = { margin: 0 };
-
-    useEffect(()=>{
-        getAppts();
-        getClients();
+     useEffect(()=>{
+        console.log('rental', rental)
+        setSelectedAppt(rental.accomodation);
+        setSelectedClient(rental.client);
+        setArrivalDate(dayjs(rental.arrival));
+        setDepartureDate(dayjs(rental.departure));
+        setAmount(rental.price_per_night);
+        setCurrency(rental.currency);
+        setOrigin(rental.origin);
+        setConfirmed(rental.confirmed);
     }, [])
 
-    const getAppts = async () =>{
-        try{
-            const res = await axios.get(`/appts/byuser/${user_id}`);
+    const data = {
+            rental_id : rental.rental_id,
+            user_id, 
+            appt_id : selectedAppt,
+            client_id: selectedClient,
+            arrival: arrivalDate,
+            departure: departureDate,
+            price_per_night: amount,
+            currency,
+            origin, 
+            confirmed
+          }
 
-            setUserAppts(res.data);
-        } catch(e){
-            console.log(e);
-        }
-    }
 
-    const getClients = async()=>{
-      try{
-          const res = await axios.get(`/clients/byuser/${user_id}`);
-          setUserClients(res.data);
-      }catch(err){
-          console.log(err);
-      }
-      
-  }
-
-    useEffect(()=>{
-        getAppts();
-    }, [])
-  
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-
-      const formData = {
-        user_id, 
-        appt_id : selectedAppt,
-        client_id: selectedClient,
-        arrival: arrivalDate.$d.toDateString(),
-        departure: departureDate.$d.toDateString(),
-        price_per_night: amount,
-        currency,
-        origin, 
-        confirmed
-      }
-
-      let isValid = true
-
-      if(departureDate < arrivalDate){
-        isValid = false
-        setMsg("The departure can't be before the arrival")
-      }
-
-      if(isValid){
-        try{
-          const res = await axios.post('/rentals', formData);
-          setMsg('');
-          navigate('/booking');
-        } catch(e){
-          console.log(e);
-          setMsg(e.response.data.msg)
-
-        }
-      }
-    };
-  
-    return (
-      <>
-        <Grid>
-          <Paper elevation={20} style={paperStyle}>
-            <Grid align="center">
-              <CalendarMonthOutlinedIcon fontSize="large" style={{ color: 'blue' }}></CalendarMonthOutlinedIcon>
-              <h2 style={headerStyle}>Add Rental</h2>
-              <Typography variant="caption">Please fill this form to add a rental!</Typography>
-            </Grid>
+  return (
+    <>
+       <Dialog open={open} onClose={onClose} aria-labelledby="update-client-dialog-title">
+            <DialogTitle id="update-client-dialog-title">Update Apartment</DialogTitle>
+            <DialogContent>
             <form>
             <FormControl fullWidth sx={{ m: 1 }}>
                 <InputLabel>Accomodation</InputLabel>
@@ -169,6 +119,7 @@ const AddRental = () =>{
                 sx={{ m: 1 }}
                 id="amount"
                 type="amount"
+                value={amount}
                 label="Price per Night"
                 variant="outlined"
                 onChange={(e) => setAmount(e.target.value)}
@@ -217,22 +168,22 @@ const AddRental = () =>{
                 label="Has the location been confirmed ?"
                 sx={{ m: 1 }}
               />
-  
-              <Button 
-              fullWidth 
-              type="submit" 
-              variant="contained" 
-              color="primary" 
-              onClick={(e) => handleSubmit(e)}>
-                Add Rental
-              </Button>
             </form>
             {msg==='' ? <></> : <Alert severity="error">{msg}</Alert>}
-          </Paper>
-        </Grid>
-        
-      </>
-    );
+          </DialogContent>
+            <DialogActions>
+                <Button onClick={onClose} color="primary">
+                    Cancel
+                </Button>
+                <Button onClick={()=>onUpdate(data)} color="secondary">
+                    Update
+                </Button>
+
+            </DialogActions>
+        </Dialog>
+      
+    </>
+  );
 }
 
-export default AddRental;
+export default UpdateRental;

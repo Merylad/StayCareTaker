@@ -18,6 +18,13 @@ export const getRentalByUserId = (id)=>{
     .orderBy('arrival')
 }
 
+export const getRentalByApptExcept = (apptid, rentalid)=>{
+    return db('rentals')
+    .select('*')
+    .where({appt_id: apptid})
+    .whereNot({ rental_id: rentalid });
+}
+
 export const addRental = (user_id, appt_id, client_id, arrival, departure, price_per_night, currency, origin , confirmed) =>{
     return db('rentals')
     .insert({user_id, appt_id, client_id, arrival, departure, price_per_night, currency, origin , confirmed})

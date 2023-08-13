@@ -25,13 +25,15 @@ function App() {
   const [firstname, setFirstname] = useState('')
   const [username, setUsername] = useState('')
   const [apptCharges, setApptCharges] = useState({})
+  const [userAppts, setUserAppts] = useState([])
+  const [userClients, setUserClients] = useState([])
 
  
 
   return (
     <>
      
-    <AppContext.Provider value = {{token, setToken, setUser_id, user_id, setApptCharges, apptCharges}}>
+    <AppContext.Provider value = {{token, setToken, setUser_id, user_id, setApptCharges, apptCharges, userAppts, setUserAppts,userClients,setUserClients }}>
       <Nav />
       <img src = {logo} alt='logo' style={{width : '100%'}}/>
       <Routes>
