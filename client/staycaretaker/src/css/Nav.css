@@ -4,3 +4,31 @@
     justify-content: space-evenly;
     gap: 20px;
 }
+
+.welcome{
+    text-align: center;
+}
+.custom-container {
+    max-width: 500px;
+  }
+
+.events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .event {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f8f8f8;
+  }
+  
+  .event.arrival {
+    background-color: #b4e0b4;
+  }
+  
+  .event.departure {
+    background-color: #73baec;
+  }

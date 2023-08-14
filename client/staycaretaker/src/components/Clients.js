@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from 'react';
+import {useContext, useState} from 'react';
 import { AppContext} from '../App';
 import axios from 'axios';
 import {Link} from "react-router-dom";
@@ -20,8 +20,7 @@ import UpdateClient from './UpdateClient';
 
 
 const Clients = () =>{
-    const {user_id} = useContext (AppContext);
-    const [clients_list, setClients_list] = useState([])
+    const {user_id, userClients,setUserClients } = useContext (AppContext);
     const [searchQuery, setSearchQuery] = useState('');
     const [deleteSuccess, setDeleteSuccess] = useState(false);
     const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
@@ -31,21 +30,19 @@ const Clients = () =>{
     const [updateSuccess, setUpdateSuccess] = useState(false);
     const [msg, setMsg] = useState('');
 
-    useEffect(()=>{
-        getClients();
-    },[])
+   
 
     const getClients = async()=>{
         try{
             const res = await axios.get(`/clients/byuser/${user_id}`);
-            setClients_list(res.data);
+            setUserClients(res.data);
         }catch(err){
             console.log(err);
         }
         
     }
 
-    const filteredClients = clients_list.filter((client) =>
+    const filteredClients = userClients.filter((client) =>
     client.firstname.toLowerCase().includes(searchQuery.toLowerCase()) ||
     client.lastname.toLowerCase().includes(searchQuery.toLowerCase()) ||
     client.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -191,7 +188,7 @@ const Clients = () =>{
             />
         </Snackbar>
         <Grid container spacing={3} >
-           {searchQuery!== '' ? renderClients(filteredClients) : renderClients(clients_list)}
+           {searchQuery!== '' ? renderClients(filteredClients) : renderClients(userClients)}
            </Grid>
            <Grid item xs={12} sm={6} md={4}>
         <Link to="/addclient" style={{ textDecoration: 'none' }}>

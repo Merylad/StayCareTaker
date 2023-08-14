@@ -56,9 +56,10 @@ export const _login = async (req, res)=>{
         const user_id = row[0].user_id;
         const username = row[0].username;
         const firstname = row[0].firstname;
+        const lastname = row[0].lastname;
         const secret = process.env.ACCES_TOKEN_SECRET;
 
-        const accessToken = jwt.sign({user_id, username,firstname }, secret, {
+        const accessToken = jwt.sign({user_id, username,firstname, lastname }, secret, {
             expiresIn: "1d"
         } );
 
@@ -93,6 +94,7 @@ export const _updatePassword = async (req, res) =>{
     const {username, last_password, new_password} = req.body;
     const id = req.params.id;
     const lower_username = username.toLowerCase();
+    
     
 
 

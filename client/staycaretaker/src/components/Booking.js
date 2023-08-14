@@ -61,7 +61,33 @@ const styles = {
   },
 };
 
+export const fetchApptName = async (id) => {
+  try {
+    const response = await fetch(`appts/byappt/${id}`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    return data[0].name;
+  } catch (error) {
+    console.error('Fetch error:', error);
+    return ''; // Return a default value in case of error
+  }
+};
 
+export const fetchClientName = async (id) => {
+  try {
+    const response = await fetch(`clients/byclient/${id}`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    return data[0].lastname +' '+ data[0].firstname;
+  } catch (error) {
+    console.error('Fetch error:', error);
+    return ''; // Return a default value in case of error
+  }
+};
 
 const Booking = () =>{
     const {user_id} = useContext(AppContext);
@@ -78,33 +104,7 @@ const Booking = () =>{
 
     const [msg, setMsg] = useState('');
 
-    const fetchApptName = async (id) => {
-      try {
-        const response = await fetch(`appts/byappt/${id}`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data[0].name;
-      } catch (error) {
-        console.error('Fetch error:', error);
-        return ''; // Return a default value in case of error
-      }
-    };
-  
-    const fetchClientName = async (id) => {
-      try {
-        const response = await fetch(`clients/byclient/${id}`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data[0].lastname +' '+ data[0].firstname;
-      } catch (error) {
-        console.error('Fetch error:', error);
-        return ''; // Return a default value in case of error
-      }
-    };
+
 
 
 

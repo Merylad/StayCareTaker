@@ -3,23 +3,116 @@ import { AppContext} from '../App';
 import jwt_token from 'jwt-decode';
 import { Typography, Button, Container, Grid } from '@mui/material';
 import { useNavigate} from 'react-router-dom';
+import axios from 'axios';
+import { Card, CardContent } from '@mui/material';
+import FlightLandIcon from '@mui/icons-material/FlightLand';
+import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
+
+import { fetchApptName, fetchClientName } from './Booking';
 
 
 
 
 const Home = ()=>{
-    const {token, setUser_id} = useContext (AppContext)
-    const [firstname, setFirstname] = useState('')
-    const [username, setUsername] = useState('')
+    const {token, setUser_id, user_id, setUserAppts, setUserClients, firstname, setFirstname, lastname, setLastname, username, setUsername, rentals, setRentals} = useContext (AppContext);
+    const [combinedEvents, setCombinedEvents] = useState([])
 
     const navigate = useNavigate()
+
+    useEffect(()=>{
+      console.log('token:', token)
+      if (token){
+          const payload = jwt_token(token);
+          setUser_id(payload.user_id);
+          setFirstname(payload.firstname);
+          setLastname(payload.lastname);
+          setUsername(payload.username);
+
+
+          getAppts();
+          getClients();
+          getRentals();
+
+          
+      }
+  }, [])
+
+    const getAppts = async () =>{
+      try{
+          const res = await axios.get(`/appts/byuser/${user_id}`);
+
+          setUserAppts(res.data);
+      } catch(e){
+          console.log(e);
+      }
+  }
+
+  const getClients = async()=>{
+    try{
+        const res = await axios.get(`/clients/byuser/${user_id}`);
+        setUserClients(res.data);
+    }catch(err){
+        console.log(err);
+    }
+    
+  }
+
+  const getRentals = async ()=>{
+    const currentDate = new Date();
+    
+    try{
+      const res = await axios.get(`/rentals/byuser/${user_id}`);
+      setRentals(res.data);
+
+      const upcomingArrivals = rentals.filter(rental =>
+        new Date(rental.arrival) >= currentDate
+      );
+
+      const upcomingDepartures = rentals.filter(rental =>
+        new Date(rental.departure) >= currentDate
+      );
+
+      const events = [
+        ...upcomingArrivals.map(event => ({ ...event, type: 'arrival', date: event.arrival })),
+        ...upcomingDepartures.map(event => ({ ...event, type: 'departure', date: event.departure }))
+      ];
+
+      const sortEvents =  events.sort((a, b) => new Date(a.arrival || a.departure) - new Date(b.arrival || b.departure));
+
+      setCombinedEvents(sortEvents);
+      
+      console.log('rentals', rentals)
+      console.log('events', events)
+      console.log('sortEvents: ', sortEvents);
+
+    } catch(e){
+      console.log(e)
+    }
+  }
+
+
 
     
 
     const userIsLogged = () =>{
         return(
             <>
-            <h1>Welcome {firstname}</h1>
+            <h1 className = 'welcome'>Welcome {firstname}</h1>
+            <Container className="custom-container">
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <div className="events-list">
+            {combinedEvents.map(event => (
+              <div key={event.id} className={`event ${event.type}`}>
+                {event.type === 'arrival' ? <FlightLandIcon /> : <FlightTakeoffIcon />} {' '}
+                {event.type === 'arrival' ? 'Arrival' : 'Departure'} on{' '}
+                {new Date(event.date).toLocaleDateString()}, place: {event.appt_id}, client: {event.client_id}
+              </div>
+            ))}
+          </div>
+        </Grid>
+      </Grid>
+    </Container>
             </>
         )
     }
@@ -58,19 +151,12 @@ const Home = ()=>{
           );
     }
 
-    useEffect(()=>{
-        if (token){
-            const payload = jwt_token(token);
-            setUser_id(payload.user_id);
-            setFirstname(payload.firstname);
-            setUsername(payload.username);
-            
-        }
-    },[])
+
 
     return (
         <>
-        {token ? userIsLogged() : userIsNotLogged()}
+        {/* {token ? userIsLogged() : userIsNotLogged()} */}
+        {userIsLogged()}
         </>
     )
 }

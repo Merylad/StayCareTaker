@@ -15,30 +15,36 @@ import AddClient from './components/AddClient';
 import AddAppt from './components/AddAppt';
 import AddCharges from './components/AddCharges';
 import AddRental from './components/AddRental';
+import Profile from './components/Profile';
+
+import { v4 as uuidv4 } from "uuid";
 
 export const AppContext = createContext()
 
 
 function App() {
   const [token, setToken]= useState(null);
-  const [user_id, setUser_id] = useState('')
-  const [firstname, setFirstname] = useState('')
-  const [username, setUsername] = useState('')
-  const [apptCharges, setApptCharges] = useState({})
-  const [userAppts, setUserAppts] = useState([])
-  const [userClients, setUserClients] = useState([])
+  const [user_id, setUser_id] = useState('');
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
+  const [username, setUsername] = useState('');
+  const [apptCharges, setApptCharges] = useState({});
+  const [userAppts, setUserAppts] = useState([]);
+  const [userClients, setUserClients] = useState([]);
+  const [rentals, setRentals] = useState([]);
+
 
  
 
   return (
     <>
      
-    <AppContext.Provider value = {{token, setToken, setUser_id, user_id, setApptCharges, apptCharges, userAppts, setUserAppts,userClients,setUserClients }}>
+    <AppContext.Provider value = {{token, setToken, setUser_id, user_id, setApptCharges, apptCharges, userAppts, setUserAppts,userClients,setUserClients, username, setUsername, firstname, setFirstname, lastname, setLastname, rentals, setRentals }}>
       <Nav />
       <img src = {logo} alt='logo' style={{width : '100%'}}/>
       <Routes>
-          <Route path = '/' element = {<Home />} />
-          <Route path = '/login' element = {<Login/>} />
+          <Route path = '/' element = {<Home key={uuidv4()} />} />
+          <Route path = '/login' element = {<Login key={uuidv4()}/>} />
           <Route path = '/register' element = {<Register/>} />
           <Route path = '/accomodations' element = {<Accomodations/>} />
           <Route path = '/booking' element = {<Booking/>} />
@@ -48,6 +54,7 @@ function App() {
           <Route path = '/addappt' element = {<AddAppt/>} />
           <Route path = '/addcharges' element = {<AddCharges/>} />
           <Route path = '/addrental' element = {<AddRental/>} />
+          <Route path = '/profile' element = {<Profile/>} />
         </Routes>
     </AppContext.Provider>
     </>

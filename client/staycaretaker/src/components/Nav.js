@@ -65,14 +65,11 @@ const Nav = ()=>{
                 </Button>
                 <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
                      <MenuItem onClick={handleMenuClose} component={Link} to="/profile">
-                    My Profile
-                     </MenuItem>
-                    <MenuItem >
-                    Dark Mode
-                    </MenuItem>
-                    <MenuItem onClick={handleMenuClose} component={Link} to="/language">
-                    Language
-                     </MenuItem>              
+                    Update Password
+                     </MenuItem> 
+                     <MenuItem onClick={handleMenuClose} component={Link} to="/contact">
+                    Contact Us
+                     </MenuItem>             
                 </Menu>
                 <Button component = {Link} to = '/'>
                 Home

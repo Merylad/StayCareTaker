@@ -1,4 +1,4 @@
-import {useState, useEffect, useContext} from 'react';
+import {useState, useContext} from 'react';
 import axios from 'axios';
 import {Link} from "react-router-dom";
 import {AppContext} from '../App';
@@ -43,8 +43,7 @@ const contentStyle = {
 
 const Accomodations = () =>{
     
-    const [appts, setAppts] = useState([]);
-    const {user_id, setApptCharges} = useContext(AppContext);
+    const {user_id, setApptCharges, setUserAppts, userAppts} = useContext(AppContext);
     const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
     const [clientToDeleteId, setClientToDeleteId] = useState(null);
     const [deleteSuccess, setDeleteSuccess] = useState(false);
@@ -53,15 +52,11 @@ const Accomodations = () =>{
     const [updateSuccess, setUpdateSuccess] = useState(false);
     
 
-    useEffect(()=>{
-        getAppts();
-    }, [])
-
     const getAppts = async () =>{
         try{
             const res = await axios.get(`/appts/byuser/${user_id}`);
 
-            setAppts(res.data);
+            setUserAppts(res.data);
         } catch(e){
             console.log(e);
         }
@@ -118,7 +113,7 @@ const Accomodations = () =>{
 
     return(
         <div style={container}>
-            {appts.map((accommodation) => (
+            {userAppts.map((accommodation) => (
                 <Card key={accommodation.appt_id} style={cardStyle}>
                                      
                 <CardContent style={contentStyle}>
