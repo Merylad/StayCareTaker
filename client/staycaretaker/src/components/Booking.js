@@ -71,7 +71,7 @@ export const fetchApptName = async (id) => {
     return data[0].name;
   } catch (error) {
     console.error('Fetch error:', error);
-    return ''; // Return a default value in case of error
+    return ''; 
   }
 };
 
@@ -82,10 +82,10 @@ export const fetchClientName = async (id) => {
       throw new Error('Network response was not ok');
     }
     const data = await response.json();
-    return data[0].lastname +' '+ data[0].firstname;
+    return data[0].firstname +' '+ data[0].lastname;
   } catch (error) {
     console.error('Fetch error:', error);
-    return ''; // Return a default value in case of error
+    return ''; 
   }
 };
 

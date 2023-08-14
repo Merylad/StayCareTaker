@@ -17,8 +17,6 @@ import AddCharges from './components/AddCharges';
 import AddRental from './components/AddRental';
 import Profile from './components/Profile';
 
-import { v4 as uuidv4 } from "uuid";
-
 export const AppContext = createContext()
 
 
@@ -43,8 +41,8 @@ function App() {
       <Nav />
       <img src = {logo} alt='logo' style={{width : '100%'}}/>
       <Routes>
-          <Route path = '/' element = {<Home key={uuidv4()} />} />
-          <Route path = '/login' element = {<Login key={uuidv4()}/>} />
+          <Route path = '/' element = {<Home  />} />
+          <Route path = '/login' element = {<Login />} />
           <Route path = '/register' element = {<Register/>} />
           <Route path = '/accomodations' element = {<Accomodations/>} />
           <Route path = '/booking' element = {<Booking/>} />

@@ -10,7 +10,20 @@
 }
 .custom-container {
     max-width: 500px;
+    border: 3px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 40px;
   }
+
+#next{
+  text-align: center;
+  font-weight: bold;
+  padding: 20px;
+  color: blue;
+  font-size: 20px;
+}
+
 
 .events-list {
     display: flex;
@@ -27,8 +40,10 @@
   
   .event.arrival {
     background-color: #b4e0b4;
+    color: rgb(7, 7, 74);
   }
   
   .event.departure {
     background-color: #73baec;
+    color: rgb(3, 62, 81);
   }
