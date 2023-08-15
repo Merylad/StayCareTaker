@@ -30,6 +30,8 @@ function App() {
   const [userAppts, setUserAppts] = useState([]);
   const [userClients, setUserClients] = useState([]);
   const [rentals, setRentals] = useState([]);
+  const [apptNames, setApptNames] = useState({});
+  const [clientNames, setClientNames] = useState({});
 
 
  
@@ -37,7 +39,7 @@ function App() {
   return (
     <>
      
-    <AppContext.Provider value = {{token, setToken, setUser_id, user_id, setApptCharges, apptCharges, userAppts, setUserAppts,userClients,setUserClients, username, setUsername, firstname, setFirstname, lastname, setLastname, rentals, setRentals }}>
+    <AppContext.Provider value = {{token, setToken, setUser_id, user_id, setApptCharges, apptCharges, userAppts, setUserAppts,userClients,setUserClients, username, setUsername, firstname, setFirstname, lastname, setLastname, rentals, setRentals, apptNames, setApptNames,clientNames, setClientNames  }}>
       <Nav />
       <img src = {logo} alt='logo' style={{width : '100%'}}/>
       <Routes>

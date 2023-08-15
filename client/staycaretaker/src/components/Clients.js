@@ -1,4 +1,4 @@
-import {useContext, useState} from 'react';
+import {useContext, useState, useEffect} from 'react';
 import { AppContext} from '../App';
 import axios from 'axios';
 import {Link} from "react-router-dom";
@@ -30,7 +30,9 @@ const Clients = () =>{
     const [updateSuccess, setUpdateSuccess] = useState(false);
     const [msg, setMsg] = useState('');
 
-   
+   useEffect(()=>{
+    getClients();
+   }, [])
 
     const getClients = async()=>{
         try{

@@ -90,8 +90,7 @@ export const fetchClientName = async (id) => {
 };
 
 const Booking = () =>{
-    const {user_id} = useContext(AppContext);
-    const [allRentals, setAllRentals] = useState([])
+    const {user_id, apptNames, clientNames, rentals, setRentals} = useContext(AppContext);
     const [rows, setRows] = useState([]);
 
     const [rentalToDeleteId, setRentalToDeleteId] = useState(null);
@@ -133,15 +132,13 @@ const Booking = () =>{
     const getRentals = async () => {
       try {
         const res = await axios.get(`/rentals/byuser/${user_id}`);
-        const updatedRows = await Promise.all(
-          res.data.map(async (rental) => {
-            const apptName = await fetchApptName(rental.appt_id);
-            const clientName = await fetchClientName(rental.client_id);
+        const updatedRows = (
+          res.data.map((rental) => {
   
             const data = createData(
               rental.rental_id,
-              apptName,
-              clientName,
+              rental.appt_id,
+              rental.client_id,
               rental.arrival,
               rental.departure,
               rental.price_per_night,
@@ -201,8 +198,6 @@ const Booking = () =>{
       const arrivalDate = new Date (arrival.$d);
       const departureDate = new Date (departure.$d);
 
-      const formatedArrivalDate = arrivalDate.toDateString();
-      const formatedDepartureDate =  departureDate.toDateString();
 
 
       const formData = {
@@ -259,9 +254,9 @@ const Booking = () =>{
           {rows.map((row) => (
             <StyledTableRow key={row.rental_id}>
               <StyledTableCell component="th" scope="row">
-                {row.accomodation}
+                {apptNames[row.accomodation] }
               </StyledTableCell>
-              <StyledTableCell align="right">{row.client}</StyledTableCell>
+              <StyledTableCell align="right">{clientNames[row.client]}</StyledTableCell>
               <StyledTableCell align="right">{row.arrival}</StyledTableCell>
               <StyledTableCell align="right">{row.departure}</StyledTableCell>
               <StyledTableCell align="right">{row.price_per_night}</StyledTableCell>

@@ -11,6 +11,7 @@ const AddAppt = () =>{
     const {user_id} = useContext (AppContext);
     const [name, setName] = useState('');
     const [city, setCity]= useState('');
+    const [msg, setMsg] = useState('')
 
     
 
@@ -24,11 +25,14 @@ const AddAppt = () =>{
         const form = {user_id, name, city}
         try{
             const res = await axios.post('/appts', form)
+            setMsg('')
             navigate('/accomodations')
+            
             
 
         }catch(err){
             console.log(err)
+            setMsg(err.response.data.msg)
             
         }
     }
@@ -65,6 +69,7 @@ const AddAppt = () =>{
 
                 <Button fullWidth type='submit' variant="contained" color='primary' onClick={(e)=>handleSubmit(e)}>Add Apartment</Button>
                 </form>
+                {msg==='' ? <></> : <Alert severity="error">{msg}</Alert>}
             </Paper>
         </Grid>
         

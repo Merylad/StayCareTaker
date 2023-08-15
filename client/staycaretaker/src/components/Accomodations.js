@@ -1,4 +1,4 @@
-import {useState, useContext} from 'react';
+import {useState, useContext, useEffect} from 'react';
 import axios from 'axios';
 import {Link} from "react-router-dom";
 import {AppContext} from '../App';
@@ -51,6 +51,9 @@ const Accomodations = () =>{
     const [selectedApptToUpdate, setSelectedApptToUpdate] = useState(null);
     const [updateSuccess, setUpdateSuccess] = useState(false);
     
+    useEffect(()=>{
+        getAppts();
+    }, [])
 
     const getAppts = async () =>{
         try{

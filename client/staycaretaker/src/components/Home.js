@@ -30,12 +30,16 @@ const Home = () => {
     setUsername,
     rentals,
     setRentals,
+    clientNames,
+    setClientNames,
+    apptNames,
+    setApptNames
+
   } = useContext(AppContext);
 
   const [combinedEvents, setCombinedEvents] = useState([]);
-  const [apptNames, setApptNames] = useState({});
-  const [clientNames, setClientNames] = useState({});
   const [selectedAppt, setSelectedAppt] = useState('');
+  const [apptCharges, setApptCharges] = useState([])
 
   const navigate = useNavigate();
 
@@ -92,11 +96,11 @@ const Home = () => {
       const res = await axios.get(`/rentals/byuser/${user_id}`);
       setRentals(res.data);
 
-      const upcomingArrivals = rentals.filter(
+      const upcomingArrivals = res.data.filter(
         (rental) => new Date(rental.arrival) >= currentDate
       );
 
-      const upcomingDepartures = rentals.filter(
+      const upcomingDepartures = res.data.filter(
         (rental) => new Date(rental.departure) >= currentDate
       );
 
@@ -118,12 +122,23 @@ const Home = () => {
           new Date(a.arrival || a.departure) -
           new Date(b.arrival || b.departure)
       );
-
+        console.log('sortEvents:', sortEvents)
       setCombinedEvents(sortEvents);
     } catch (e) {
       console.log(e);
     }
   };
+
+  const handleSelect = async (e)=>{
+    setSelectedAppt(e.target.value)
+
+    try{
+      const res = await axios.get(`/charges/${e.target.value}`)
+      setApptCharges(res.data)
+      }catch(e){
+          console.log(e)
+      }
+  }
 
 
   return (
@@ -131,16 +146,17 @@ const Home = () => {
       {token ? (
         <>
           <h1 className="welcome">Hi {firstname} !</h1>
-
+          <section id='homelogged'>
+          <div id='homecalendar'>
           <FormControl fullWidth sx={{ m: 1 }}>
                 <InputLabel>Accomodation</InputLabel>
                 <Select
-                  style = {{width:'300px'}}
+                  style = {{borderRadius: '10px'}}
                   id="selectedAppt"
                   label="accomodation"
                   variant="outlined"
                   value={selectedAppt}
-                  onChange={(e) => setSelectedAppt(e.target.value)}
+                  onChange={(e) => handleSelect(e)}
                 >
                     {userAppts.map(appt=>{
                         return(
@@ -154,14 +170,16 @@ const Home = () => {
            selectedApartment={selectedAppt} 
            events={rentals}
            apptNames = {apptNames}
-           clientNames = {clientNames} />
+           clientNames = {clientNames}
+           apptCharges = {apptCharges} />
+           </div>
           
           <Container className="custom-container">
             <div id='next'>Next Arrivals/Departures </div>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <div className="events-list">
-                  {combinedEvents.map((event) => (
+                  {combinedEvents.length>0 && combinedEvents.map((event) => (
                     <div key={event.id} className={`event ${event.type}`}>
                       {event.type === "arrival" ? (
                         <FlightLandIcon />
@@ -178,6 +196,7 @@ const Home = () => {
               </Grid>
             </Grid>
           </Container>
+          </section>
         </>
       ) : (
         <Container maxWidth="sm" style={{ marginTop: "50px" }}>

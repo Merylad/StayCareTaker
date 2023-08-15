@@ -34,8 +34,24 @@ export const _getApptByUserId = async (req, res)=>{
 
 export const _addAppt = async(req, res)=>{
     const {user_id, name, city} = req.body;
+    const lower_name = name.toLowerCase()
+    try {
+
+        const appt_list = await getApptByUserId(user_id);
+
+        for (let appt of appt_list){    
+            if (appt.name.toLowerCase() === lower_name){
+     return res.status(404).json({msg: 'This name already exists'})
+            }
+        }
+
+    }catch(error){
+        console.log(error);
+        res.status(404).json({msg: 'Something went wrong :('})
+    }
+
     try{
-        const row = await addAppt(user_id, name, city);
+        const row = await addAppt(user_id, lower_name, city);
         res.json({msg: 'Appartment added successfully', appt: row});
     }catch(e){
         console.log(e);

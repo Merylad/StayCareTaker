@@ -5,25 +5,27 @@ import moment from "moment";
 import { Paper, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 
+import OccupancyGraph from "./OccupancyGraph";
+import ChargesGraph from "./ChargesGraph";
+
 const localizer = momentLocalizer(moment);
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
   marginTop: theme.spacing(2),
   backgroundColor: "#E1F5FE", 
-  borderRadius: theme.spacing(1),
-  width : '70%',
-  margin: '0 auto'
+  borderRadius: theme.spacing(1)
 }));
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
   marginBottom: theme.spacing(2),
 }));
 
-const CustomCalendar = ({ selectedApartment, events, apptNames, clientNames }) => {
+const CustomCalendar = ({ selectedApartment, events, apptNames, clientNames, apptCharges }) => {
   const apartmentEvents = events.filter((event) => event.appt_id === selectedApartment);
 
   return (
+    <>
     <StyledPaper elevation={3}>
       <StyledTypography variant="h5">
         {apptNames[selectedApartment]} Calendar
@@ -40,6 +42,10 @@ const CustomCalendar = ({ selectedApartment, events, apptNames, clientNames }) =
         style={{ height: "300px" }} 
       />
     </StyledPaper>
+
+    <OccupancyGraph apartmentEvents={apartmentEvents} />
+    <ChargesGraph apartmentEvents={apartmentEvents} charges={apptCharges} />
+    </>
   );
 };
 

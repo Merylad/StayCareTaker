@@ -17,7 +17,7 @@ import Groups2OutlinedIcon from '@mui/icons-material/Groups2Outlined';
 const Nav = ()=>{
     const [anchorEl, setAnchorEl] = useState(null);
     const navigate = useNavigate();
-    const {token, setToken} = useContext (AppContext);
+    const {token, setToken, username} = useContext (AppContext);
 
     const logout = async()=>{
     try{
@@ -61,7 +61,7 @@ const Nav = ()=>{
             {token &&(
                 <>
                  <Button onClick={handleMenuOpen}>
-                    <ManageAccountsOutlinedIcon style={{color:'blue'}} />
+                    <ManageAccountsOutlinedIcon style={{color:'blue'}} />{username}
                 </Button>
                 <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
                      <MenuItem onClick={handleMenuClose} component={Link} to="/profile">
@@ -74,12 +74,12 @@ const Nav = ()=>{
                 <Button component = {Link} to = '/'>
                 Home
                 </Button>
-                <Button component={Link} to="/accomodations">
-                Accomodations < LocationCityRoundedIcon/>
-                </Button>
                 <Button component={Link} to="/booking">
                 Booking <CalendarMonthOutlinedIcon />
                 </Button>
+                <Button component={Link} to="/accomodations">
+                Accomodations < LocationCityRoundedIcon/>
+                </Button>                
                 <Button component={Link} to="/clients">
                 Clients <Groups2OutlinedIcon/>
                 </Button>
