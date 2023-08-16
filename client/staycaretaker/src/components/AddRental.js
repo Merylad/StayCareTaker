@@ -157,7 +157,7 @@ const AddRental = () =>{
                   
                   label="Departure"
                   slotProps={{ textField: { fullWidth: true } }}
-                  value={departureDate}
+                  value={arrivalDate}
                   onChange={(date) => setDepartureDate(date)}
                   renderInput={(params) => <TextField {...params}  />}
                 />

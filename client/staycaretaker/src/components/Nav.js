@@ -126,8 +126,9 @@ const Nav = () => {
             )}
             
             
-        </Stack>
+        </Stack> 
       </div>
+    
     </nav>
     </>
   );

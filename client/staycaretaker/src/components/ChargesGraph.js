@@ -15,15 +15,38 @@ const ChargesGraph = ({ apartmentEvents, charges }) => {
   }));
 
   apartmentEvents.forEach((event) => {
-    const eventDate = new Date(event.arrival);
-    const month = eventDate.getMonth();
-    const year = eventDate.getFullYear();
-
-    if (year === selectedYear) {
-      const earnings = parseFloat(event.price_per_night) * ((new Date(event.departure) - new Date(event.arrival)) / (1000 * 60 * 60 * 24));
-      monthlyData[month].name = new Date(currentYear, month).toLocaleString("en-US", { month: "long" });
-      monthlyData[month].earnings += earnings;
-      monthlyData[month].balance += earnings;
+    const eventStart = new Date(event.arrival);
+    const eventEnd = new Date(event.departure);
+    const eventYear = eventStart.getFullYear();
+  
+    if (eventYear === selectedYear) {
+      let currentMonth = eventStart.getMonth();
+  
+      while (currentMonth <= eventEnd.getMonth()) {
+        const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+        const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
+        const daysInMonth = (lastDayOfMonth - firstDayOfMonth) / (1000 * 60 * 60 * 24) + 1;
+        
+        let days = 0;
+  
+        if (currentMonth === eventStart.getMonth() && currentMonth === eventEnd.getMonth()) {
+          days = (eventEnd - eventStart) / (1000 * 60 * 60 * 24) + 1;
+        } else if (currentMonth === eventStart.getMonth()) {
+          days = (lastDayOfMonth - eventStart) / (1000 * 60 * 60 * 24) + 1;
+        } else if (currentMonth === eventEnd.getMonth()) {
+          days = (eventEnd - firstDayOfMonth) / (1000 * 60 * 60 * 24) + 1;
+        } else {
+          days = daysInMonth;
+        }
+        
+        const earnings = parseFloat(event.price_per_night) * days;
+        
+        monthlyData[currentMonth].name = new Date(currentYear, currentMonth).toLocaleString("en-US", { month: "long" });
+        monthlyData[currentMonth].earnings += earnings;
+        monthlyData[currentMonth].balance += earnings;
+  
+        currentMonth++;
+      }
     }
   });
 
