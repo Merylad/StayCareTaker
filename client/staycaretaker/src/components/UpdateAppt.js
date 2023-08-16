@@ -3,7 +3,7 @@ import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, A
 import {useState, useContext, useEffect} from 'react';
 
 
-const UpdateClient = ({ accomodation, open, onClose, onUpdate}) => {
+const UpdateClient = ({ accomodation, open, onClose, onUpdate, msg}) => {
     
     const [name, setName] = useState('');
     const [city, setCity]= useState('');
@@ -48,6 +48,7 @@ const UpdateClient = ({ accomodation, open, onClose, onUpdate}) => {
                 />
 
                 </form>
+                {msg==='' ? <></> : <Alert severity="error">{msg}</Alert>}
                 
             </DialogContent>
             <DialogActions>

@@ -122,7 +122,6 @@ const Home = () => {
           new Date(a.arrival || a.departure) -
           new Date(b.arrival || b.departure)
       );
-        console.log('sortEvents:', sortEvents)
       setCombinedEvents(sortEvents);
     } catch (e) {
       console.log(e);

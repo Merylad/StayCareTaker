@@ -30,6 +30,7 @@ const AddClient = () =>{
         const form = {firstname, lastname, email, phone, user_id}
         try{
             const res = await axios.post('/clients', form)
+            navigate('/')
             navigate('/clients')
             
 

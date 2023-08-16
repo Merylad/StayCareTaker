@@ -1,4 +1,4 @@
-import { getAllAppts, getApptById,getApptByUserId, addAppt, updateAppt, deleteAppt } from "../models/appts.js";
+import { getAllAppts, getApptById,getApptByUserId, addAppt, updateAppt, deleteAppt, getApptByUserIdExcept } from "../models/appts.js";
 
 export const _getAllAppts = async (req, res) =>{
     try{
@@ -60,10 +60,26 @@ export const _addAppt = async(req, res)=>{
 }
 
 export const _updateAppt = async(req, res) =>{
-    const {name, city} = req.body;
+    const {user_id, name, city} = req.body;
     const id = req.params.id;
+    const lower_name = name.toLowerCase()
+    try {
+
+        const appt_list = await getApptByUserIdExcept(user_id, id);
+
+        for (let appt of appt_list){    
+            if (appt.name.toLowerCase() === lower_name){
+     return res.status(404).json({msg: 'This name already exists'})
+            }
+        }
+
+    }catch(error){
+        console.log(error);
+        res.status(404).json({msg: 'Something went wrong :('})
+    }
+
     try{
-        const row = await updateAppt(name, city, id);
+        const row = await updateAppt(lower_name, city, id);
         res.json ({msg: 'Appartment successfully updated', appt: row});
 
     }catch(e){

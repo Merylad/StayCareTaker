@@ -1,8 +1,39 @@
-.navbar{
+
+.responsive-menu {
+  display: none;
+}
+
+.old-navbar {
+  display: none;
+}
+
+
+
+
+
+@media (max-width: 768px) {
+  .responsive-menu {
+    background-color: rgb(173, 216, 230);
+    display: flex;
+    align-items: center;
+  }
+
+  .old-navbar {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .responsive-menu {
+    display: none;
+  }
+
+  .old-navbar {
     background-color: rgb(173, 216, 230);
     display: flex;
     justify-content: space-evenly;
     gap: 20px;
+  }
 }
 
 .welcome{
@@ -69,3 +100,5 @@
     background-color: #73baec;
     color: rgb(3, 62, 81);
   }
+
+

@@ -17,6 +17,13 @@ export const getApptByUserId = (id) =>{
     .where({user_id : id})
 }
 
+export const getApptByUserIdExcept = (userid, apptid) =>{
+    return db('appts')
+    .select('*')
+    .where({user_id : userid})
+    .whereNot({appt_id : apptid} )
+}
+
 export const addAppt = (user_id, name, city) =>{
     return db('appts')    
     .insert({user_id, name, city})

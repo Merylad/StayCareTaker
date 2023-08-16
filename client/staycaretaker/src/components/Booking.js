@@ -261,8 +261,8 @@ const Booking = () =>{
               <StyledTableCell align="right">{row.departure}</StyledTableCell>
               <StyledTableCell align="right">{row.price_per_night}</StyledTableCell>
               <StyledTableCell align="right">
-                 {((new Date(row.departure) - new Date(row.arrival)) / (1000 * 60 * 60 * 24)) *
-      row.price_per_night}
+                 {Math.round(((new Date(row.departure) - new Date(row.arrival)) / (1000 * 60 * 60 * 24))) *
+      parseFloat(row.price_per_night)}
       </StyledTableCell>
               <StyledTableCell align="right">{row.currency}</StyledTableCell>
               <StyledTableCell align="right">{row.origin}</StyledTableCell>

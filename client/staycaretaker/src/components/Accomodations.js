@@ -50,6 +50,7 @@ const Accomodations = () =>{
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
     const [selectedApptToUpdate, setSelectedApptToUpdate] = useState(null);
     const [updateSuccess, setUpdateSuccess] = useState(false);
+    const [msg, setMsg]= useState('')
     
     useEffect(()=>{
         getAppts();
@@ -81,6 +82,7 @@ const Accomodations = () =>{
             } catch (err) {
                 console.log(err);
                 
+                
             }
         };
     
@@ -97,7 +99,7 @@ const Accomodations = () =>{
     //The handleUpdate is called when the user click 'update' on the dialog
     const handleUpdate = async (data) => {
         const {name, city, appt_id} = data
-        const form = {name, city}
+        const form = {user_id, name, city}
         try{
             const res = await axios.put(`/appts/${appt_id}`, form)
             setUpdateSuccess(true)
@@ -105,6 +107,7 @@ const Accomodations = () =>{
             getAppts();
         }catch(err){
             console.log(err)
+            setMsg(err.response.data.msg)
             
             
         }
@@ -213,6 +216,7 @@ const Accomodations = () =>{
                     open={updateDialogOpen}
                     onClose={handleUpdateDialogClose}
                     onUpdate={handleUpdate}
+                    msg={msg}
                 />
             )}
         
