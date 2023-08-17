@@ -39,8 +39,19 @@ const CustomCalendar = ({ selectedApartment, events, apptNames, clientNames, app
         }))}
         startAccessor="start"
         endAccessor="end"
-        style={{ height: "300px" }} 
+        style={{ height: "400px" }} 
+        eventPropGetter={(event, start, end, isSelected) => {
+          const style = {
+            backgroundColor: "#3174ad", 
+            color: "white", 
+            fontSize: "16px", 
+            padding: "2px 6px",
+            height : '50px', 
+          };
+          return { style };
+        }}
       />
+
     </StyledPaper>
 
     <OccupancyGraph apartmentEvents={apartmentEvents} />

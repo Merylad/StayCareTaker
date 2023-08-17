@@ -41,6 +41,7 @@ const Nav = () => {
   return (
     <>
     <nav className="navbar">
+      
         <div className="responsive-menu">
       <Button onClick={handleMenuOpen} className="menu-icon">
         <MenuIcon /> {username}
@@ -127,6 +128,7 @@ const Nav = () => {
             
             
         </Stack> 
+        
       </div>
     
     </nav>

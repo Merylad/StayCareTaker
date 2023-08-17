@@ -15,7 +15,7 @@ export const getRentalByUserId = (id)=>{
     return db('rentals')
     .where({user_id : id})
     .select('*')
-    .orderBy('arrival')
+    .orderBy('arrival','desc')
 }
 
 export const getRentalByApptExcept = (apptid, rentalid)=>{

@@ -84,9 +84,9 @@ const ChargesGraph = ({ apartmentEvents, charges }) => {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="earnings" fill="#82ca9d" barSize={30} />
-          <Bar dataKey="charges" fill="#8884d8" barSize={30} />
-          <Bar dataKey="balance" fill="#ffc658" barSize={30} />
+          <Bar dataKey="earnings" fill="blue" barSize={30} />
+          <Bar dataKey="charges" fill="red" barSize={30} />
+          <Bar dataKey="balance" fill="purple" barSize={30} />
         </BarChart>
       </ResponsiveContainer>
     </>
