@@ -59,9 +59,6 @@ const Nav = () => {
             <MenuItem onClick={handleMenuClose} component={Link} to="/profile">
               Update Password
             </MenuItem>
-            <MenuItem onClick={handleMenuClose} component={Link} to="/contact">
-              Contact Us
-            </MenuItem>
             <MenuItem onClick={handleMenuClose} component={Link} to="/booking">
               Booking <CalendarMonthOutlinedIcon />
             </MenuItem>
